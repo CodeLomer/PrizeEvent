@@ -1,0 +1,17 @@
+name: PrizeEvent
+version: '1.0-SNAPSHOT'
+main: com.github.codelomer.prizeEvent.PrizeEvent
+api-version: '1.19'
+commands:
+  prizeevent:
+    permission: prizeevent.player.command
+  prizeeventAdmin:
+    permission: prizeevent.admin.command
+permissions:
+  prizeevent.player.command:
+    default: true
+  prizeevent.admin.command:
+    default: op
+
+depend: [PlaceholderAPI, Vault, SmartInvs]
+

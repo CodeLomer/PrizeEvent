@@ -1,0 +1,138 @@
+# плейсхолдеры которые поддерживает плагин для PlaceholderAPI
+#-------------------------------------------------------------
+# %prize_balance% - баланс розыгрыша
+# %prize_time_left% - оставшееся время до начала розыгрыша
+# %ticket_amount% - количество билетов игрока
+
+
+# команды плагина
+#-------------------------------------------------------------
+# /prizeevent - prizeevent.player.command
+# /prizeeventAdmin - prizeevent.admin.command
+
+
+
+# настройка анимации bossBar
+boss-bar-info:
+  default-text: "Скоро начнется розыгрыш! Набранная сумма %prize_balance%"
+  default-color: BLUE
+  default-style: SOLID
+
+  # анимация после достижения определенного промежутка времени
+  after:
+    time: "50s"
+    text: "Набранная сумма %prize_balance%. Ивент начнется через %prize_time_left%"
+    color: BLUE
+    style: SOLID
+    # убавление шкалы если true
+    # иначе увеличение
+    reversed: true
+
+event-times:
+  - "1m"
+
+placeholder-time-format: "%s часов, %s минут, %s секунд"
+
+log-messages: true
+messages:
+  no-one-payed:
+    - "ни кто не купил билеты розыгрыш обновляется"
+  not-online:
+    - "игрок не в сети"
+  invalid-amount:
+    - "неверное количество билетов"
+  ticket-given:
+    - "билеты выданы игроку"
+  ticket-taken:
+    - "билеты сняты у игрока"
+  config-reloaded:
+    - "конфиг перезагружен"
+  invalid-arguments:
+    - "неверные аргументы"
+  admin-help:
+    - "/prizeeventAdmin give <игрок> <количество билетов> - выдать билеты игроку"
+    - "/prizeeventAdmin take <игрок> <количество билетов> - снять билеты у игрока"
+    - "/prizeeventAdmin reload - перезагрузить конфиг"
+    - "/prizeeventAdmin info <игрок> - информация о билетах игрока"
+    - "/prizeeventAdmin help - помощь по камандам администратора"
+  player-help:
+    - "/prizeevent info - информация о купленных билетах"
+    - "/prizeevent help - помощь по командам игрока"
+  player-info-for-admin:
+    - "игрок: %player_name%"
+    - "количество билетов: %prize_tickets_amount%"
+  player-info:
+    - "количество билетов: %prize_tickets_amount%"
+  winner:
+    - "победитель: %player_name%. Он получил выигрыш: %prize_balance% долларов!"
+  event-skipped:
+    - "процесс ожидания пропущен."
+  event-started:
+    - "розыгрыш начался!"
+
+
+max-prize-balance: -1
+balance-give: 200
+
+prize-roulette-gui:
+  title: "Выйгрыш приза"
+  size: 54
+  win-slot: 4
+  animation-slots: [ 0,1,2,3,4,5,6,7,8]
+
+  decorate:
+    background:
+      material: BLACK_STAINED_GLASS_PANE
+      display-name: " "
+      lore: [ " " ]
+      slots:
+        - 9
+        - 10
+        - 11
+        - 12
+        - 13
+        - 14
+        - 15
+        - 16
+        - 17
+        - 18
+        - 19
+        - 20
+        - 21
+        - 22
+        - 23
+        - 24
+        - 25
+        - 26
+        - 27
+        - 28
+        - 29
+        - 30
+        - 31
+        - 32
+        - 33
+        - 34
+        - 35
+        - 36
+        - 37
+        - 38
+        - 39
+        - 40
+        - 41
+        - 42
+        - 43
+        - 44
+        - 45
+        - 46
+        - 47
+        - 48
+        - 49
+        - 50
+        - 51
+        - 52
+        - 53
+
+
+
+
+
