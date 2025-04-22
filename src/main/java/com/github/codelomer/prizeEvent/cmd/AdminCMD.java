@@ -40,7 +40,7 @@ public class AdminCMD extends AbstractCommand {
                 SimpleUtil.sendMessage(sender,config.getMessage("invalid-amount"));
                 return;
             }
-            eventManager.giveTicket(player.getUniqueId(),amount);
+            eventManager.giveTicket(player.getUniqueId(),amount,true);
             SimpleUtil.sendMessage(sender,config.getMessage("ticket-given"));
             return;
         }
@@ -111,10 +111,10 @@ public class AdminCMD extends AbstractCommand {
         if(args.length == 2 && args[0].equalsIgnoreCase("info")){
             return SimpleUtil.toColorListText(Bukkit.getOnlinePlayers().stream().map(Player::getName).toList());
         }
-        if(args.length == 3 && args[0].equalsIgnoreCase("give") || args.length == 3 && args[0].equalsIgnoreCase("take")){
+        if(args.length == 2 && args[0].equalsIgnoreCase("give") || args.length == 3 && args[0].equalsIgnoreCase("take")){
             return SimpleUtil.toColorListText(Bukkit.getOnlinePlayers().stream().map(Player::getName).toList());
         }
-        if(args.length == 4 && args[0].equalsIgnoreCase("give") || args.length == 4 && args[0].equalsIgnoreCase("take")){
+        if(args.length == 3 && args[0].equalsIgnoreCase("give") || args.length == 4 && args[0].equalsIgnoreCase("take")){
             return List.of("<количество>");
         }
         return Collections.emptyList();

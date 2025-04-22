@@ -9,6 +9,7 @@ import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.configuration.ConfigurationSection;
@@ -36,9 +37,12 @@ public class EventConfig {
 
     private List<Integer> eventTimes;
 
+    private Sound winSound;
+    private Sound animationSound;
+    private int animationTime;
+
     private String prizeRouletteGuiTitle;
     private int prizeRouletteGuiSize;
-    private int prizeRouletteGuiWinSlot;
     private List<Integer> prizeRouletteGuiAnimationSlots;
     private List<DecorateButton> decorateButtons;
 
@@ -76,15 +80,18 @@ public class EventConfig {
 
         prizeRouletteGuiTitle = SimpleUtil.toColorText(section.getString("prize-roulette-gui.title",""));
         prizeRouletteGuiSize = section.getInt("prize-roulette-gui.size",54);
-        prizeRouletteGuiWinSlot = section.getInt("prize-roulette-gui.win-slot",4);
         prizeRouletteGuiAnimationSlots = section.getIntegerList("prize-roulette-gui.animation-slots");
         decorateButtons = new ArrayList<>();
 
-        ConfigurationSection decorateSection = getOrCreateSection(section,"prize-roulette-gui.decorate");
+        ConfigurationSection decorateSection = getOrCreateSection(section, "decorate");
+
         for(String buttonKey : decorateSection.getKeys(false)){
             decorateButtons.add(loadButton(decorateSection,buttonKey));
         }
         timeFormat = section.getString("placeholder-time-format","%s часов, %s минут, %s секунд");
+        winSound = getEnum(section,"prize-roulette-gui.win-sound",Sound.class,Sound.AMBIENT_BASALT_DELTAS_LOOP);
+        animationSound = getEnum(section,"prize-roulette-gui.sound",Sound.class,Sound.BLOCK_NOTE_BLOCK_PLING);
+        animationTime = section.getInt("prize-roulette-gui.animation-time",7);
     }
 
     public void reloadConfig(){
@@ -123,15 +130,14 @@ public class EventConfig {
 
 
     private DecorateButton loadButton(@NonNull ConfigurationSection section, @NonNull String key){
-        ConfigurationSection buttonSection = getOrCreateSection(section, key);
-        Material material = Material.getMaterial(buttonSection.getString("material",""));
+        Material material = Material.getMaterial(section.getString(key+".material",""));
         if(material == null) material = Material.BARRIER;
-        String displayName = SimpleUtil.toColorText(buttonSection.getString("display-name",""));
-        int modelData = buttonSection.getInt("model-data",-1);
-        List<String> lore = SimpleUtil.toColorListText(buttonSection.getStringList("lore"));
-        List<Integer> slots = buttonSection.getIntegerList("slots");
-        List<ItemFlag> flags = getEnumList(buttonSection, "flags", ItemFlag.class);
-        ConfigurationSection enchantSection = getOrCreateSection(buttonSection, "enchants");
+        String displayName = SimpleUtil.toColorText(section.getString(key+".display-name",""));
+        int modelData = section.getInt("model-data",-1);
+        List<String> lore = SimpleUtil.toColorListText(section.getStringList(key+".lore"));
+        List<Integer> slots = section.getIntegerList(key+".slots");
+        List<ItemFlag> flags = getEnumList(section, "flags", ItemFlag.class);
+        ConfigurationSection enchantSection = getOrCreateSection(section, key+".enchants");
         Map<Enchantment,Integer> enchantments = new HashMap<>();
         for(String enchantKey : enchantSection.getKeys(false)){
             Enchantment enchantment = Enchantment.getByName(enchantKey);

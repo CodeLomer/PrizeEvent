@@ -97,6 +97,7 @@ public class WaitingState implements EventState {
             task.cancel();
         }
         eventManager.updateEventOverTime();
+        updated = false;
     }
 
     @Override

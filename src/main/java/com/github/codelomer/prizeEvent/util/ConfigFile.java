@@ -61,6 +61,15 @@ public class ConfigFile {
         loadYamlConfiguration(file);
     }
 
+    public void saveConfig(){
+        if(fileInvalid()) createNewFile();
+        try {
+            config.save(file);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save configuration", e);
+        }
+    }
+
     private boolean fileInvalid(){
         return file == null || !file.exists() || config == null;
     }

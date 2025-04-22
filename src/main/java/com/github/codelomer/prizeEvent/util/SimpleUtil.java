@@ -3,7 +3,6 @@ package com.github.codelomer.prizeEvent.util;
 import lombok.NonNull;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.permissions.Permissible;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -87,11 +86,6 @@ public final class SimpleUtil {
         return text.stream().filter(Objects::nonNull).map(SimpleUtil::toColorText).toList();
     }
 
-
-    public static boolean hasPermission(@NonNull Permissible permissible, @NonNull String permission) {
-        return permissible.getEffectivePermissions().stream().anyMatch(permissionAttachmentInfo ->
-                permissionAttachmentInfo.getPermission().equalsIgnoreCase(permission));
-    }
 
     public static void sendMessage(@NonNull CommandSender sender, @NonNull List<String> message) {
         message.forEach(sender::sendMessage);

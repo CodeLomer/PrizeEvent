@@ -1,24 +1,28 @@
 package com.github.codelomer.prizeEvent.state.impl;
 
 import com.github.codelomer.prizeEvent.config.EventConfig;
+import com.github.codelomer.prizeEvent.gui.EventGui;
+import com.github.codelomer.prizeEvent.gui.GuiManager;
 import com.github.codelomer.prizeEvent.manager.EventManager;
 import com.github.codelomer.prizeEvent.state.EventState;
 import com.github.codelomer.prizeEvent.state.EventStatus;
 import com.github.codelomer.prizeEvent.model.EventTicket;
-import com.github.codelomer.prizeEvent.util.SimpleUtil;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import me.clip.placeholderapi.PlaceholderAPI;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Set;
 @RequiredArgsConstructor
 public class StartedState implements EventState {
     private final @NonNull EventConfig config;
     private final Economy economy;
+    private final JavaPlugin plugin;
+    private final @NonNull GuiManager guiManager;
+
 
     @Override
     public void enterState(EventManager eventManager) {
@@ -38,18 +42,19 @@ public class StartedState implements EventState {
             eventManager.setState(EventStatus.WAITING);
             return;
         }
-
-        // TODO: Показать GUI анимацию игрокам
         for (Player player : Bukkit.getOnlinePlayers()) {
-
+            EventGui gui = new EventGui(guiManager,
+                    config.getPrizeRouletteGuiTitle(),
+                    config.getPrizeRouletteGuiSize(),
+                    config.getPrizeRouletteGuiAnimationSlots(),
+                    config.getDecorateButtons(),
+                    plugin,
+                    config,
+                    winner.getUniqueId(),
+                    eventManager.getMembers(),eventManager,economy);
+            gui.open(player);
         }
 
-        if(economy != null){
-            economy.depositPlayer(winner, eventManager.getPrizeAmount());
-        }
-        for(Player player: Bukkit.getOnlinePlayers()) {
-            SimpleUtil.sendMessage(player, config.getMessage("winner").stream().map(line -> PlaceholderAPI.setPlaceholders(player, line)).toList());
-        }
         eventManager.setState(EventStatus.WAITING);
     }
 

@@ -13,5 +13,5 @@ permissions:
   prizeevent.admin.command:
     default: op
 
-depend: [PlaceholderAPI, Vault, SmartInvs]
+depend: [PlaceholderAPI, Vault]
 
