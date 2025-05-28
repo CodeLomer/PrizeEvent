@@ -11,7 +11,8 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class SimpleUtil {
+public final class
+SimpleUtil {
     private SimpleUtil(){}
     
     public static String toColorText(String from) {

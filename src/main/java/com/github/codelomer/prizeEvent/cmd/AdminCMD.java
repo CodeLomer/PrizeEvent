@@ -82,12 +82,12 @@ public class AdminCMD extends AbstractCommand {
             return;
         }
         if(args.length == 1 && args[0].equalsIgnoreCase("start")){
-            eventManager.setState(EventStatus.WAITING);
+            eventManager.setState(EventStatus.WAITING,0);
             SimpleUtil.sendMessage(sender,config.getMessage("event-started"));
             return;
         }
         if(args.length == 1 && args[0].equalsIgnoreCase("skip")){
-            eventManager.setState(EventStatus.STARTED);
+            eventManager.setState(EventStatus.STARTED,0);
             SimpleUtil.sendMessage(sender,config.getMessage("event-skipped"));
             return;
 

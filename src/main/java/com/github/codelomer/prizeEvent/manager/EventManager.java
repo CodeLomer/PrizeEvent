@@ -88,6 +88,13 @@ public class EventManager {
             }
         }
         this.prizeAmount = dataFile.getConfig().getInt("prize-sum");
+        boolean isWaitingState = dataFile.getConfig().getBoolean("is-waiting-state",false);
+        if(isWaitingState){
+            int seconds = dataFile.getConfig().getInt("seconds");
+            setState(EventStatus.WAITING,seconds);
+            return;
+        }
+        setState(EventStatus.NOT_STARTED,0);
     }
 
     public void saveData(UUID uuid){
@@ -97,16 +104,16 @@ public class EventManager {
     }
 
 
-    public void setState(@NonNull EventStatus eventStatus) {
-        if(state == null) changeState(eventStatus);
+    public void setState(@NonNull EventStatus eventStatus, int seconds) {
+        if(state == null) changeState(eventStatus,seconds);
         if(state.getStatus() == eventStatus) return;
         state.leaveState(this);
-        changeState(eventStatus);
+        changeState(eventStatus,seconds);
     }
 
-    private void changeState(@NonNull EventStatus status){
+    private void changeState(@NonNull EventStatus status, int seconds){
         switch (status) {
-            case WAITING -> state = new WaitingState(plugin, config);
+            case WAITING -> state = new WaitingState(plugin, config,seconds);
             case STARTED -> state = new StartedState(config,economy,plugin,guiManager);
             case NOT_STARTED -> state = new NotStartedState();
         }
@@ -122,7 +129,7 @@ public class EventManager {
     }
 
     public void reload() {
-        setState(EventStatus.WAITING);
+        setState(EventStatus.WAITING,0);
 
     }
 
@@ -147,5 +154,13 @@ public class EventManager {
 
     public void clearWinnerTickets(@NonNull UUID winner) {
         tickets.removeAll(winner);
+    }
+
+    public void saveState() {
+        if (state instanceof WaitingState) {
+            dataFile.getConfig().set("seconds", ((WaitingState) state).getEventStartTimeSeconds());
+            dataFile.getConfig().set("is-waiting-state", true);
+            dataFile.saveConfig();
+        }
     }
 }

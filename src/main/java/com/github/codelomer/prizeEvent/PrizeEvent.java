@@ -9,20 +9,19 @@ import com.github.codelomer.prizeEvent.integration.PlaceholderAPIIntegration;
 import com.github.codelomer.prizeEvent.integration.VaultAPIIntegration;
 import com.github.codelomer.prizeEvent.listener.EventListener;
 import com.github.codelomer.prizeEvent.manager.EventManager;
-import com.github.codelomer.prizeEvent.state.EventStatus;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class PrizeEvent extends JavaPlugin {
+    private EventManager eventManager;
 
     @Override
     public void onEnable() {
         EventConfig config = new EventConfig(this);
         GuiManager guiManager = new GuiManager();
         VaultAPIIntegration vaultAPI = new VaultAPIIntegration();
-        EventManager eventManager = new EventManager(config,this,vaultAPI.getEconomy(),guiManager);
+        eventManager = new EventManager(config,this,vaultAPI.getEconomy(),guiManager);
         eventManager.initData();
-        eventManager.setState(EventStatus.NOT_STARTED);
 
         Bukkit.getPluginManager().registerEvents(new GuiListener(guiManager), this);
         Bukkit.getPluginManager().registerEvents(new EventListener(eventManager, config), this);
@@ -37,5 +36,8 @@ public final class PrizeEvent extends JavaPlugin {
     @Override
     public void onDisable() {
         Bukkit.getScheduler().cancelTasks(this);
+        if(eventManager != null){
+            eventManager.saveState();
+        }
     }
 }

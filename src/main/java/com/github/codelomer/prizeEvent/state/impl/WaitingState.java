@@ -4,6 +4,8 @@ import com.github.codelomer.prizeEvent.config.EventConfig;
 import com.github.codelomer.prizeEvent.manager.EventManager;
 import com.github.codelomer.prizeEvent.state.EventState;
 import com.github.codelomer.prizeEvent.state.EventStatus;
+import lombok.Getter;
+import lombok.Setter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BossBar;
@@ -16,25 +18,30 @@ public class WaitingState implements EventState {
     private final JavaPlugin plugin;
     private final EventConfig config;
     private BukkitTask task;
+    @Setter
+    @Getter
     private long eventStartTimeSeconds;
     private BossBar bossBar;
     private boolean updated;
     private String bossBarTitleBefore;
     private String bossBarTitleAfter;
 
-    public WaitingState(JavaPlugin plugin, EventConfig config) {
+    public WaitingState(JavaPlugin plugin, EventConfig config, int eventStartTimeSeconds) {
         this.plugin = plugin;
         this.config = config;
+        this.eventStartTimeSeconds = eventStartTimeSeconds;
     }
 
     @Override
     public void enterState(EventManager eventManager) {
         leaveState(eventManager);
-        this.eventStartTimeSeconds = System.currentTimeMillis() / 1000 + eventManager.getEventOverTime();
+        if(eventStartTimeSeconds == 0) eventStartTimeSeconds = System.currentTimeMillis() / 1000 + eventManager.getEventOverTime();
         createDefaultBossBar();
 
         for (Player player : Bukkit.getOnlinePlayers()) {
+            if(bossBar.getPlayers().contains(player)) continue;
             bossBar.addPlayer(player);
+
         }
 
         startBossBarAnimation(eventManager);
@@ -48,7 +55,7 @@ public class WaitingState implements EventState {
             long secondsLeft = eventStartTimeSeconds - now;
 
             if (secondsLeft <= 0) {
-                eventManager.setState(EventStatus.STARTED);
+                eventManager.setState(EventStatus.STARTED,0);
                 return;
             }
 

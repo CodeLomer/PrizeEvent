@@ -32,14 +32,14 @@ public class StartedState implements EventState {
             for(String line: config.getMessage("no-one-payed")) {
                 Bukkit.broadcastMessage(line);
             }
-            eventManager.setState(EventStatus.WAITING);
+            eventManager.setState(EventStatus.WAITING,0);
             return;
         }
 
        OfflinePlayer winner = getRandomWinner(tickets, eventManager);
 
         if (winner == null) {
-            eventManager.setState(EventStatus.WAITING);
+            eventManager.setState(EventStatus.WAITING,0);
             return;
         }
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -55,7 +55,7 @@ public class StartedState implements EventState {
             gui.open(player);
         }
 
-        eventManager.setState(EventStatus.WAITING);
+        eventManager.setState(EventStatus.WAITING,0);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class StartedState implements EventState {
 
         if (winnerTicket == null) {
             Bukkit.broadcastMessage("§cПроизошла неизвестная ошибка.");
-            eventManager.setState(EventStatus.WAITING);
+            eventManager.setState(EventStatus.WAITING,0);
             return null;
         }
         tickets.remove(winnerTicket);
